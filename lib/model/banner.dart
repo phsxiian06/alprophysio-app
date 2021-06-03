@@ -1,4 +1,4 @@
-import 'package:OEGlobal/model/response.dart';
+import 'package:alpro_physio/model/response.dart';
 
 class BannerList extends Data{
   final int id;

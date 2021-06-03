@@ -294,24 +294,6 @@ class NavState extends State<ProRoute> {
                           ? Center()
                           : handleBottomNav(context),
                     ),
-                    audio == 1 ? Positioned(
-                        bottom: audioHeight,
-                        left: 0,
-                        right: 0,
-                        child: audioPlaying(audioImage, audioName, audioAuthor, (){
-                          setState(() {
-                            if(pause == 1){
-                              pause = 0;
-                            } else{
-                              pause = 1;
-                            }
-                          });
-                        }, (){
-                          setState(() {
-                            audio = 0;
-                          });
-                        })
-                    ) : Center(),
                   ],
                 ),
               ),

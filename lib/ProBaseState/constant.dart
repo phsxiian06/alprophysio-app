@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info/package_info.dart';
 import 'package:device_info/device_info.dart';
-import 'package:OEGlobal/language/app_language.dart';
-import 'package:OEGlobal/language/label_util.dart';
+import 'package:alpro_physio/language/app_language.dart';
+import 'package:alpro_physio/language/label_util.dart';
 
 //ThemeColor
 const themePurple = Color(0xFF932A91);
@@ -69,8 +69,6 @@ var locale = 'en';
 var localeVersion = '1.0.0';
 var labelVersion = '0.0.0';
 var languageCode = '';
-var audio = 0;
-var audioHeight = 85.0;
 
 var googleApiKey = 'AIzaSyArUIWzNvSv-cj2awcUapj7oxef0BzKLF0';
 

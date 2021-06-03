@@ -1,117 +1,147 @@
+import 'package:alpro_physio/ui/main_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'language/app_language.dart';
+import 'language/app_localization.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:alpro_physio/controller/size_config.dart';
+import 'package:alpro_physio/ProBaseState/export.dart';
 void main() {
-  runApp(MyApp());
+  runApp(MyApp(AppLanguage()));
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final AppLanguage _appLanguage;
+
+  MyApp(this._appLanguage);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    ErrorWidget.builder = ProBaseState.customErrorWidget;
+    //FlutterStatusbarcolor.setStatusBarColor(_color_);
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+
+    return ChangeNotifierProvider<AppLanguage>(
+      create: (_) => _appLanguage,
+      child: Consumer<AppLanguage>(builder: (context, model, child) {
+        return MaterialApp(
+          title: 'Alpro Physio',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: themePurpleSwatch,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          supportedLocales: [
+            Locale(AppLanguage.LANG_EN),
+            Locale(AppLanguage.LANG_CN),
+          ],
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            // built-in localization of basic text for Material Widgets
+            //GlobalMaterialLocalizations.delegate,
+            // built-in localization for text-direction LTR/RTL
+            //GlobalWidgetsLocalizations.delegate,
+            //GlobalCupertinoLocalizations.delegate,
+            DefaultCupertinoLocalizations.delegate
+          ],
+          locale: model.appLocale,
+          builder: (context, child) {
+            return MediaQuery(
+              child: child,
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            );
+          },
+          home: LoadingPage(),
+        );
+      }),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+class LoadingPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _LoadingPageState createState() => _LoadingPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+class _LoadingPageState extends State<LoadingPage> {
+  @override
+  void initState() {
+    super.initState();
+    // pro base state setup
+    ProBaseState.allowedOrientation([DeviceOrientation.portraitUp]);
+    ProBaseState.hideKeyboardWhenTappedAround = true;
+    ProBaseState.onFailed = ((internalContext, code, msg) {
+      if (code == TokenExpired) {
+        accessToken = '';
+        return true;
+      } else if (code == ForceUpdate) {
+        openForceUpdateDialog(internalContext);
+        return true;
+      } else if (code == LabelUpdate) {
+        //update your laballing here.
+        return true;
+      }
+      return false;
     });
+    // todo - FCM init
+    // Fcm.init();
+    Future.delayed(Duration(milliseconds: 1200)).then((_) {
+      _initPref();
+    });
+  }
+
+  void _initPref() async {
+    await preferenceInit();
+    // todo - get endpoint
+    // todo - get label
+    _checkCredential();
+  }
+
+  void _checkCredential() async {
+    if (isLogin) {
+      ProBaseState.statusBarTextWhiteColor = false;
+      onEnterMainPage();
+    } else {
+      if(firstTime == 1){
+        onEnterMainPage();
+        /*Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => ProRoute(LoginPage(),
+          gotAppBar: false, closePopup: true,),), (route) => false);*/
+      } else {
+        onEnterMainPage();
+        /*Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => ProRoute(IntroductionPage(),
+          gotAppBar: false, closePopup: true,),), (route) => false);*/
+      }
+    }
+  }
+
+  void onEnterMainPage() async {
+    var key = GlobalKey<MainNav>();
+    var page = GlobalKey<MainPage>();
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => ProRoute(MainPage(key, 0),
+      gotAppBar: false, navState: MainNav(page, tabIndex: 0), key: key, childKey: page, closePopup: true,)),(route) => route == null);
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // init the size config
+    SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: Container(
+        width: double.infinity,
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+          children: [
+            //Image.asset('assets/logo.png', width: 100, height: 100,),
+            //SizedBox(height: 50,),
+            Container(
+              width: 30,
+              child: Text('Alpro Physio', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

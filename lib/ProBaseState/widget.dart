@@ -1,67 +1,6 @@
-import 'package:OEGlobal/model/banner.dart';
+import 'package:alpro_physio/model/banner.dart';
 import 'package:flutter/material.dart';
 import 'export.dart';
-
-var inputBorder = OutlineInputBorder(
-  borderSide: BorderSide(
-    color: Colors.black,
-  ),
-  borderRadius: BorderRadius.circular(5.0),
-);
-
-var focusBorder = OutlineInputBorder(
-  borderSide: BorderSide(
-    color: Colors.black,
-  ),
-  borderRadius: BorderRadius.circular(5.0),
-);
-
-var inputBorderGrey = OutlineInputBorder(
-  borderSide: BorderSide(
-    color: Colors.grey[200],
-  ),
-  borderRadius: BorderRadius.circular(5.0),
-);
-
-var focusBorderGrey = OutlineInputBorder(
-  borderSide: BorderSide(
-    color: Colors.grey[200],
-  ),
-  borderRadius: BorderRadius.circular(5.0),
-);
-
-var inputBorderWhite = OutlineInputBorder(
-  borderSide: BorderSide(
-    color: Colors.white,
-  ),
-  borderRadius: BorderRadius.circular(5.0),
-);
-
-var focusBorderWhite = OutlineInputBorder(
-  borderSide: BorderSide(
-    color: Colors.white,
-  ),
-  borderRadius: BorderRadius.circular(5.0),
-);
-
-var inputPadding = EdgeInsets.symmetric(
-  vertical: 10.0,
-  horizontal: 12.0,
-);
-
-var inputTitleStyle = TextStyle(
-  fontSize: 15.0,
-  color: Colors.black,
-);
-
-var inputTextStyle = TextStyle(
-  fontSize: 15.0,
-  color: Colors.black,
-);
-
-var buttonShape = RoundedRectangleBorder(
-  borderRadius: BorderRadius.circular(5.0),
-);
 
 Widget loader(bool isLoading, String label, {Color color = Colors.white}){
   return (isLoading ? GestureDetector(
@@ -201,81 +140,6 @@ Widget imageTitleAppBar() {
   );
 }
 
-Widget searchAppBar(
-  TextEditingController textEditingController,
-  Function onBack, {
-  String hint,
-  Function(String value) onSearch,
-}) {
-  return AppBar(
-    backgroundColor: themePurple,
-    centerTitle: true,
-    leading: InkWell(
-      child: Transform.scale(
-        scale: 0.4,
-        child: Image.asset(
-          'assets/ic_back.png',
-        ),
-      ),
-      onTap: onBack,
-    ),
-    actions: [
-      Container(
-        width: 40,
-      ),
-    ],
-    title: TextField(
-      style: inputTextStyle,
-      controller: textEditingController,
-      textInputAction: TextInputAction.search,
-      onSubmitted: onSearch,
-      decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
-        isDense: true,
-        enabledBorder: inputBorderWhite,
-        focusedBorder: focusBorderWhite,
-        contentPadding: inputPadding,
-        hintText: hint,
-        suffixIcon: InkWell(
-          child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Icon(
-              Icons.search,
-              color: Colors.grey,
-            ),
-          ),
-          onTap: () {
-            onSearch(textEditingController.text);
-          },
-        ),
-        suffixIconConstraints: BoxConstraints(),
-      ),
-    ),
-  );
-}
-
-Widget greyTextField(
-  TextEditingController controller,
-  TextInputType inputType, {
-  Function(String) onSubmitted,
-}) {
-  return TextField(
-    style: inputTextStyle,
-    controller: controller,
-    decoration: InputDecoration(
-      fillColor: Colors.grey[200],
-      filled: true,
-      isDense: true,
-      enabledBorder: inputBorderGrey,
-      focusedBorder: focusBorderGrey,
-      contentPadding: inputPadding,
-    ),
-    keyboardType: inputType,
-    onSubmitted: onSubmitted,
-  );
-}
-
 Widget tabBar(TabController controller, List<Widget> tabs) {
   return Material(
     color: themePurple,
@@ -396,7 +260,7 @@ Widget button(String label, Color color, {VoidCallback callback, double top = 15
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          gotIcon ? Icon(icon, size: 20, color: themePurple,) : Center(),
+          gotIcon ? Icon(icon, size: 20, color: themePurple) : Center(),
           gotImage ? Image.asset('assets/$img.png', width: 20, height: 20) : Center(),
           SizedBox(width: gotImage ? 10 : 0),
           Text(label, style: TextStyle(fontWeight: fontWeight, color: fontColor, fontSize: fontSize),),
@@ -406,118 +270,6 @@ Widget button(String label, Color color, {VoidCallback callback, double top = 15
     onTap: callback,
     highlightColor: Colors.transparent,
     splashColor: Colors.transparent,
-  );
-}
-
-Widget titleBar(String title, VoidCallback callback, {bool hideMore = false}){
-  return Container(
-    padding: EdgeInsets.only(left: 10),
-    child: Row(
-      children: [
-        Expanded(child: Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,),)),
-        hideMore ? Center() : InkWell(
-          child: Container(
-            padding: EdgeInsets.only(left: 10, right: 3),
-            child: Row(
-              children: [
-                Text('查看更多', style: TextStyle(color: themePurple),),
-                Icon(Icons.chevron_right, color: themePurple,)
-              ],
-            ),
-          ),
-          onTap: callback,
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-        ),
-      ],
-    ),
-  );
-}
-
-Widget leaderBoardView(String title, VoidCallback callback, {double width = 280}){
-  return InkWell(
-    child: Container(
-      width: width,
-      padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        image: DecorationImage(
-            image: AssetImage('assets/bulk.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.1), BlendMode.srcATop)
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: TextStyle(color: themeWhite, fontWeight: FontWeight.w500, fontSize: 20),),
-          Text('Top10', style: TextStyle(color: themeWhite, fontWeight: FontWeight.w500, fontSize: 20),),
-          SizedBox(height: 5,),
-          numberLabel('1', '面对焦虑，突破挑战，迎向未来'),
-          numberLabel('2', '洞见趋势: 察觉别人忽略的细节'),
-          numberLabel('3', '思维决定出路，观念决定方向'),
-          SizedBox(height: 10,),
-          Padding(
-            padding: EdgeInsets.only(left: 13.0),
-            child: Row(
-              children: [
-                Text('查看更多', style: TextStyle(color: themeWhite, fontSize: 13),),
-                Icon(Icons.chevron_right, color: themeWhite,)
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-    onTap: callback,
-  );
-}
-
-Widget numberLabel(String num, String label){
-  return Row(
-    children: [
-      Text(num, style: TextStyle(color: themeWhite),),
-      SizedBox(width: 5,),
-      Expanded(child: Text(label, style: TextStyle(color: themeWhite), maxLines: 1, overflow: TextOverflow.ellipsis,)),
-    ],
-  );
-}
-
-Widget subscribe(String title, String des, VoidCallback callback){
-  return Padding(
-    padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
-    child: InkWell(
-      child: Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(48),
-          color: themeLightPurple,
-          border: Border.all(width: 1, color: themePurple),
-        ),
-        child: Row(
-          children: [
-            Image.asset('assets/star.png', width: 35, height: 35,),
-            SizedBox(width: 10,),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: TextStyle(color: themePurple, fontWeight: FontWeight.bold),),
-                  Text(des, style: TextStyle(),),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                Text('马上开启', style: TextStyle(),),
-                Icon(Icons.chevron_right,)
-              ],
-            ),
-          ],
-        ),
-      ),
-      onTap: callback,
-    ),
   );
 }
 
@@ -559,59 +311,6 @@ Widget customAppBar(String title, VoidCallback callback, {bool gotImage = false,
           onTap: iconCallback,
         ) : Center(),
       ],
-    ),
-  );
-}
-
-Widget audioPlaying(String img, String name, String author, VoidCallback play, VoidCallback close){
-  return Container(
-    padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2)]
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 50,
-            height: 65,
-            child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  bottomLeft:  Radius.circular(8),
-                ),
-                child: Image.asset('assets/$img.png', fit: BoxFit.cover,)
-            ),
-          ),
-          SizedBox(width: 10,),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15), maxLines: 1, overflow: TextOverflow.ellipsis,),
-                SizedBox(height: 2,),
-                Text(author, style: TextStyle(color: themeGrey, fontSize: 12),),
-              ],
-            ),
-          ),
-          InkWell(
-            child: Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: Image.asset(pause == 1 ? 'assets/play.png' : 'assets/pause.png', width: 40, height: 40,),
-            ),
-            onTap: play,
-          ),
-          InkWell(
-            child: Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: Image.asset('assets/close.png', width: 25, height: 25,),
-            ),
-            onTap: close,
-          ),
-        ],
-      ),
     ),
   );
 }

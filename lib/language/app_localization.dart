@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:OEGlobal/language/label_util.dart';
-import 'package:OEGlobal/language/app_language.dart';
-import 'package:OEGlobal/model/label.dart';
-import 'package:OEGlobal/ProBaseState/export.dart';
+import 'package:alpro_physio/language/label_util.dart';
+import 'package:alpro_physio/language/app_language.dart';
+import 'package:alpro_physio/model/label.dart';
+import 'package:alpro_physio/ProBaseState/export.dart';
 
 class AppLocalizations {
   final Locale locale;

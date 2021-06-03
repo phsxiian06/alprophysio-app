@@ -9,10 +9,10 @@ import 'package:vibration/vibration.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:OEGlobal/model/weekday.dart';
-import 'package:OEGlobal/ProBaseState/pro_base_state.dart';
-import 'package:OEGlobal/ProBaseState/in_app_browser.dart';
-import 'package:OEGlobal/ProBaseState/constant.dart' as Constant;
+import 'package:alpro_physio/model/weekday.dart';
+import 'package:alpro_physio/ProBaseState/pro_base_state.dart';
+import 'package:alpro_physio/ProBaseState/in_app_browser.dart';
+import 'package:alpro_physio/ProBaseState/constant.dart' as Constant;
 
 
 void showFlash(BuildContext context, String title, String message) {

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:OEGlobal/ProBaseState/export.dart';
+import 'package:alpro_physio/ProBaseState/export.dart';
 
 class AppLanguage extends ChangeNotifier {
   Locale _appLocale = Locale(LANG_EN);

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'dart:convert' as json;
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
-import 'package:OEGlobal/model/response.dart';
-import 'package:OEGlobal/ProBaseState/export.dart';
+import 'package:alpro_physio/model/response.dart';
+import 'package:alpro_physio/ProBaseState/export.dart';
 
 typedef OnSuccess = void Function(String message);
 typedef OnFail = bool Function(String code, String message);

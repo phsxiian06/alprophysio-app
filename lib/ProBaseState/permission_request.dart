@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:OEGlobal/language/app_localization.dart';
-import 'package:OEGlobal/ProBaseState/export.dart';
-import 'package:OEGlobal/language/language_key.dart' as Lang;
+import 'package:alpro_physio/language/app_localization.dart';
+import 'package:alpro_physio/ProBaseState/export.dart';
+import 'package:alpro_physio/language/language_key.dart' as Lang;
 
 Future<bool> requestCameraStoragePermission() async {
   Map<Permission, PermissionStatus> statuses = await [

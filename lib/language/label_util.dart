@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:OEGlobal/model/label.dart';
+import 'package:alpro_physio/model/label.dart';
 
 class LabelUtil {
   static LabelUtil _instance;
