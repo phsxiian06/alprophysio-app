@@ -1,0 +1,179 @@
+Required Plug-in to work:
+----------
+http: ^0.12.2
+  intl: ^0.16.1
+  shared_preferences: ^0.5.10
+  package_info: ^0.4.3
+  device_info: ^0.4.2+7
+  event_bus: ^1.1.0
+  flushbar: ^1.10.4
+  provider: ^4.3.2+1
+  url_launcher: ^5.5.1
+  path_provider: ^1.6.14
+  permission_handler: ^5.0.1+1
+  webview_flutter: ^0.3.22+1
+  flutter_statusbarcolor: ^0.2.3
+  vibration: ^1.4.0
+  audioplayers: ^0.16.0
+  app_settings: ^4.0.1+1
+  cached_network_image: ^2.3.1
+  flutter_keyboard_visibility: ^3.2.2
+----------
+
+----------  Example: ----------
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'language/app_language.dart';
+import 'language/app_localization.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:project_name/controller/size_config.dart';
+import 'package:project_name/ProBaseState/export.dart';
+
+void main() {
+  runApp(MyApp(AppLanguage()));
+}
+
+class MyApp extends StatelessWidget {
+  final AppLanguage _appLanguage;
+
+  MyApp(this._appLanguage);
+
+  @override
+  Widget build(BuildContext context) {
+    ErrorWidget.builder = ProBaseState.customErrorWidget;
+    //FlutterStatusbarcolor.setStatusBarColor(_color_);
+    //FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
+
+    return ChangeNotifierProvider<AppLanguage>(
+      create: (_) => _appLanguage,
+      child: Consumer<AppLanguage>(builder: (context, model, child) {
+        return MaterialApp(
+          title: 'project_name',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: themeYellowSwatch,
+            //fontFamily: 'WorkSans',
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          supportedLocales: [
+            Locale(AppLanguage.LANG_EN),
+            Locale(AppLanguage.LANG_BM),
+          ],
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            // built-in localization of basic text for Material Widgets
+            GlobalMaterialLocalizations.delegate,
+            // built-in localization for text-direction LTR/RTL
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            DefaultCupertinoLocalizations.delegate
+          ],
+          locale: model.appLocale,
+          builder: (context, child) {
+            return MediaQuery(
+              child: child,
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            );
+          },
+          home: LoadingPage(),
+        );
+      }),
+    );
+  }
+}
+
+class LoadingPage extends StatefulWidget {
+  @override
+  _LoadingPageState createState() => _LoadingPageState();
+}
+
+class _LoadingPageState extends State<LoadingPage> {
+  @override
+  void initState() {
+    super.initState();
+    // pro base state setup
+    ProBaseState.allowedOrientation([DeviceOrientation.portraitUp]);
+    ProBaseState.hideKeyboardWhenTappedAround = true;
+    ProBaseState.onFailed = ((internalContext, code, msg) {
+      if (code == TokenExpired) {
+        accessToken = '';
+        return true;
+      } else if (code == ForceUpdate) {
+        openForceUpdateDialog(internalContext);
+        return true;
+      } else if (code == LabelUpdate) {
+        //update your laballing here.
+        return true;
+      }
+      return false;
+    });
+    // todo - FCM init
+    // Fcm.init();
+    _initPref();
+  }
+
+  void _initPref() async {
+    await preferenceInit();
+    // todo - get endpoint
+    // todo - get label
+    _checkCredential();
+  }
+
+  void _checkCredential() async {
+    if (isLogin) {
+    } else {
+      /*Future.delayed(Duration(milliseconds: 1500), () {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => ProRoute(
+                LoginPage(),
+                gotAppBar: false,
+                closePopup: true,
+              ),
+            ),
+            (route) => false);
+      });*/
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // init the size config
+    SizeConfig().init(context);
+
+    return Scaffold(
+      body: Container(
+        color: themeSplashScreen,
+        child: Center(
+          /*child: Image.asset(
+            'assets/splash_screen.png',
+          ),*/
+        ),
+      ),
+    );
+  }
+}
+
+---------- ---------- ----------
+
+# flutter_localizations:
+    sdk: flutter
+
+// Example of add custom font under flutter:
+
+uses-material-design: true
+
+  assets:
+    - assets/
+
+  fonts:
+    - family: WorkSans
+      fonts:
+        - asset: fonts/WorkSans-Regular.ttf
+        - asset: fonts/WorkSans-Medium.ttf
+        - asset: fonts/WorkSans-Bold.ttf
+        - asset: fonts/WorkSans-SemiBold.ttf
+        - asset: fonts/WorkSans-ExtraBold.ttf
